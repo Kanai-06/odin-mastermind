@@ -13,22 +13,44 @@ class User < Game # rubocop:disable Style/Documentation
 
   attr_reader :name, :code, :guess, :game_finished, :red, :white
 
+  def self.correct_number_input(number_length, integer_start, integer_end)
+    number_input = ''
+    loop do
+      number_input = gets.chomp
+
+      # Ensure the input is a valid number and has the correct length
+      if number_input.length == number_length && number_input.to_i.to_s == number_input &&
+         number_input.chars.all? { |digit| (integer_start.to_i..integer_end.to_i).cover?(digit.to_i) }
+        break
+      else
+        puts "Each digit of the #{'number'.colorize(mode: :bold)} (of length #{number_length}) must be an integer
+      #{"between #{integer_start} and #{integer_end}".colorize(mode: :bold)}"
+      end
+    end
+
+    number_input.to_i
+  end
+
   def grade_guess(code, guess)
     return if guess.nil?
+
+    puts ''
 
     puts 'Provide the results :'.colorize(mode: :underline)
 
     puts "#{'red'.colorize(color: :red, mode: :bold)} (right color, right spot)= "
-    @red = gets.chomp.to_i
+    @red = User.correct_number_input(1, 0, 4)
 
     puts "#{'white'.colorize(color: :white, mode: :bold)} (right color, wrong spot)= "
-    @white = gets.chomp.to_i
+    @white = User.correct_number_input(1, 0, 4)
 
     @game_finished = true if @red == 4
   end
 
   def get_guess(iteration, red, white, last_guess)
-    puts "Guess #{(iteration + 1).to_s.colorize(mode: :bold)}"
+    puts ''
+    puts "Guess #{(iteration + 1).to_s.colorize(mode: :bold)}".colorize(mode: :underline)
+    puts ''
 
     if iteration.zero?
       show_colors
@@ -44,32 +66,10 @@ class User < Game # rubocop:disable Style/Documentation
 
   private
 
-  def show_colors
-    puts ''
-    puts 'Colors :'.colorize(mode: :underline)
-    puts ''
-    GUESS_COLORS.each_with_index do |color, index|
-      puts "#{index + 1}\t#{CIRCLE.colorize(color: color)}\t#{color.to_s.colorize(color: color, mode: :bold)}"
-    end
-  end
-
   def get_colors
     puts ''
     puts "Enter the #{'4 numbers'.colorize(mode: :bold)} of your color code"
 
-    @code = ''
-
-    loop do
-      if (@code = gets.chomp).length == 4 && @code.to_i.instance_of?(Integer) &&
-         @code.chars.all? do |number|
-           number.to_i in (1..6)
-         end
-        break
-      else
-        puts "The code must be #{'4 numbers'.colorize(mode: :bold)} between #{'1 and 6'.colorize(mode: :bold)}"
-      end
-    end
-
-    @code
+    @code = User.correct_number_input(4, 1, 6).to_s
   end
 end

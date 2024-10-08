@@ -45,7 +45,7 @@ class Game
 
   def give_roles(user, bot)
     puts 'Do you want to be the creator (enter 0) or the guesser (enter 1)'
-    user_role_index = valid_input(0, 1)
+    user_role_index = User.correct_number_input(1, 0, 1)
 
     @creator = (if user_role_index == 0
                   user.apply_role('creator')
@@ -71,14 +71,6 @@ class Game
     User.new(name)
   end
 
-  def valid_input(start_input, end_input)
-    until (start_input..end_input).cover?(user_input = gets.chomp.to_i)
-      puts "Input value must be between #{start_input} and #{end_input}"
-    end
-
-    user_input
-  end
-
   def print_code(code) # rubocop:disable Metrics/AbcSize
     return unless code
 
@@ -88,6 +80,15 @@ class Game
     puts(code.chars.reduce('') do |string, char|
       "#{string}   #{CIRCLE.colorize(color: GUESS_COLORS[char.to_i - 1])} #{GUESS_COLORS[char.to_i - 1]}"
     end)
+  end
+
+  def show_colors
+    puts ''
+    puts 'Colors :'.colorize(mode: :underline)
+    puts ''
+    GUESS_COLORS.each_with_index do |color, index|
+      puts "#{index + 1}\t#{CIRCLE.colorize(color: color)}\t#{color.to_s.colorize(color: color, mode: :bold)}"
+    end
   end
 end
 

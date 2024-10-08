@@ -55,18 +55,21 @@ class Bot < Game
   end
 
   def get_guess(iteration, red, white, last_guess)
-    puts "Guess #{(iteration + 1).to_s.colorize(mode: :bold)}"
+    show_colors if iteration.zero?
+
+    puts ''
+    puts "Guess #{(iteration + 1).to_s.colorize(mode: :bold)}".colorize(mode: :underline)
+    puts ''
 
     if iteration.zero?
-      @guess = Array.new(4) { rand(1..6) }.join
+      @guess = '1122'
     else
       @possible_codes.delete(last_guess)
       @possible_codes.each do |code|
         @possible_codes.delete(code) unless grade_guess(code, last_guess) == [red, white]
       end
 
-      puts @possible_codes.include?('3354')
-      puts @possible_codes.length
+      puts "Possible codes : #{@possible_codes.length}"
 
       @guess = @possible_codes.length > 1 ? @possible_codes[rand(@possible_codes.length)] : @possible_codes[0]
     end
