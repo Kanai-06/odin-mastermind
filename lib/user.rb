@@ -1,9 +1,9 @@
 class User < Game # rubocop:disable Style/Documentation
-  def initialize(name)
+  def initialize(name) # rubocop:disable Lint/MissingSuper
     @name = name
   end
 
-  def apply_role(role)
+  def apply_role(_role)
     @code = ''
     @guess = ''
     @game_finished = false
@@ -31,7 +31,7 @@ class User < Game # rubocop:disable Style/Documentation
     number_input.to_i
   end
 
-  def grade_guess(code, guess)
+  def grade_guess(_code, guess)
     return if guess.nil?
 
     puts ''
@@ -47,7 +47,7 @@ class User < Game # rubocop:disable Style/Documentation
     @game_finished = true if @red == 4
   end
 
-  def get_guess(iteration, red, white, last_guess)
+  def get_guess(iteration, red, white, _last_guess)
     puts ''
     puts "Guess #{(iteration + 1).to_s.colorize(mode: :bold)}".colorize(mode: :underline)
     puts ''

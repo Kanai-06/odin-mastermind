@@ -51,14 +51,14 @@ class Game
                   user.apply_role('creator')
                   user
                 else
-                  bot.apply_role 'creator'
+                  bot.apply_role('creator')
                   bot
                 end)
     @guesser = (if user_role_index == 1
                   user.apply_role('guesser')
                   user
                 else
-                  bot.apply_role 'guesser'
+                  bot.apply_role('guesser')
                   bot
                 end)
     nil
@@ -94,3 +94,5 @@ end
 
 require_relative 'lib/user'
 require_relative 'lib/bot'
+
+Game.new.start_game
